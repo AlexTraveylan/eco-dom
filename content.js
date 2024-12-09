@@ -1,3 +1,18 @@
+(() => {
+  console.log("🎯 Test d'exécution immédiate de content.js");
+  // Créer un élément visuel pour confirmer le chargement
+  const testDiv = document.createElement("div");
+  testDiv.textContent = "Extension chargée";
+  testDiv.style.position = "fixed";
+  testDiv.style.top = "0";
+  testDiv.style.left = "0";
+  testDiv.style.backgroundColor = "red";
+  testDiv.style.color = "white";
+  testDiv.style.padding = "5px";
+  testDiv.style.zIndex = "99999";
+  document.body.appendChild(testDiv);
+})();
+
 const countShadow = () => {
   const countElements = (element) => {
     if (!element) return 0;

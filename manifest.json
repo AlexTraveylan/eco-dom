@@ -6,7 +6,8 @@
     "permissions": [
         "activeTab",
         "storage",
-        "scripting"
+        "scripting",
+        "tabs"
     ],
     "host_permissions": [
         "*://design-system.docs.pole-emploi.infra/*"
@@ -21,7 +22,8 @@
             ],
             "js": [
                 "content.js"
-            ]
+            ],
+            "run_at": "document_end"
         }
     ],
     "action": {
