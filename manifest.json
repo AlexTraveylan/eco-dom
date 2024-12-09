@@ -10,7 +10,7 @@
         "tabs"
     ],
     "host_permissions": [
-        "*://design-system.docs.pole-emploi.infra/*"
+        "*://design-system.docs.pole-emploi.intra/*"
     ],
     "background": {
         "service_worker": "background.js"
