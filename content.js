@@ -21,70 +21,106 @@ const countShadow = () => {
 };
 
 function waitForIframe() {
+  console.log("🔍 Recherche de l'iframe...");
   const iframe = document.querySelector(
     'iframe[data-testid="storybook-preview-iframe"]'
   );
+
   if (!iframe) {
+    console.log("❌ Iframe non trouvée, nouvelle tentative dans 1s");
     setTimeout(waitForIframe, 1000);
     return;
   }
 
-  iframe.addEventListener("load", () => {
+  console.log("✅ Iframe trouvée !");
+
+  // On retire l'ancien listener s'il existe
+  iframe.removeEventListener("load", iframeLoadHandler);
+
+  // On définit le handler séparément pour pouvoir le remove
+  function iframeLoadHandler() {
+    console.log("🔄 Iframe chargée, traitement en cours...");
     try {
-      // Attendre que le contenu de l'iframe soit chargé
+      // Attendre que le contenu de l'iframe soit complètement chargé
       setTimeout(() => {
+        console.log("⚙️ Évaluation du nombre d'éléments...");
         const count = iframe.contentWindow.eval(
           `(${countShadow.toString()})()`
         );
-        console.log("Nombre d'éléments DOM :", count);
+        console.log("📊 Nombre d'éléments DOM :", count);
 
-        // Créer le bouton d'ajout au panier s'il n'existe pas déjà
-        if (!document.getElementById("add-to-cart-button")) {
-          const button = document.createElement("button");
-          button.id = "add-to-cart-button";
-          button.textContent = `Ajouter au panier (${count} éléments)`;
-          button.style.position = "fixed";
-          button.style.top = "10px";
-          button.style.right = "10px";
-          button.style.zIndex = "9999";
-          button.style.padding = "10px";
-          button.style.backgroundColor = "#4CAF50";
-          button.style.color = "white";
-          button.style.border = "none";
-          button.style.borderRadius = "4px";
-          button.style.cursor = "pointer";
+        // Supprimer l'ancien bouton s'il existe
+        const oldButton = document.getElementById("add-to-cart-button");
+        if (oldButton) {
+          console.log("🗑️ Suppression de l'ancien bouton");
+          oldButton.remove();
+        }
 
-          button.addEventListener("click", () => {
-            const componentName = window.location.pathname
-              .split("/")
-              .pop()
-              .replace(".html", "");
-            chrome.storage.local.get(["cart"], (result) => {
-              const cart = result.cart || [];
-              cart.push({ name: componentName, count });
-              chrome.storage.local.set({ cart }, () => {
-                button.textContent = "Ajouté au panier !";
-                setTimeout(() => {
-                  button.textContent = `Ajouter au panier (${count} éléments)`;
-                }, 2000);
-              });
+        console.log("🎨 Création du nouveau bouton");
+        const button = document.createElement("button");
+        button.id = "add-to-cart-button";
+        button.textContent = `Ajouter au panier (${count} éléments)`;
+        button.style.position = "fixed";
+        button.style.top = "10px";
+        button.style.right = "10px";
+        button.style.zIndex = "9999";
+        button.style.padding = "10px";
+        button.style.backgroundColor = "#4CAF50";
+        button.style.color = "white";
+        button.style.border = "none";
+        button.style.borderRadius = "4px";
+        button.style.cursor = "pointer";
+
+        button.addEventListener("click", () => {
+          console.log("🛒 Clic sur le bouton d'ajout au panier");
+          const componentName = window.location.pathname
+            .split("/")
+            .pop()
+            .replace(".html", "");
+          chrome.storage.local.get(["cart"], (result) => {
+            const cart = result.cart || [];
+            cart.push({ name: componentName, count });
+            chrome.storage.local.set({ cart }, () => {
+              console.log("✅ Composant ajouté au panier");
+              button.textContent = "Ajouté au panier !";
+              setTimeout(() => {
+                button.textContent = `Ajouter au panier (${count} éléments)`;
+              }, 2000);
             });
           });
+        });
 
-          document.body.appendChild(button);
-        }
+        document.body.appendChild(button);
+        console.log("✅ Bouton ajouté à la page");
       }, 1000);
     } catch (error) {
-      console.error("Erreur lors du comptage des éléments :", error);
+      console.error("❌ Erreur lors du traitement :", error);
     }
-  });
+  }
+
+  // Ajout du nouveau listener
+  iframe.addEventListener("load", iframeLoadHandler);
+
+  // Déclencher manuellement le handler si l'iframe est déjà chargée
+  if (
+    iframe.contentWindow &&
+    iframe.contentWindow.document.readyState === "complete"
+  ) {
+    console.log("📍 Iframe déjà chargée, exécution immédiate");
+    iframeLoadHandler();
+  }
 }
 
+console.log("🚀 Script content.js démarré");
 if (window.location.pathname.match(/\/components\/detail\/.+\.html/)) {
-  // Attendre que la page soit complètement chargée
+  console.log("📄 Page de détail de composant détectée");
   if (document.readyState === "loading") {
+    console.log(
+      "⏳ Document en cours de chargement, attente du DOMContentLoaded"
+    );
     document.addEventListener("DOMContentLoaded", waitForIframe);
   } else {
+    console.log("📑 Document déjà chargé, exécution immédiate");
     waitForIframe();
   }
 }
