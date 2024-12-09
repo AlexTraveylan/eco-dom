@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            width: 300px;
+            padding: 10px;
+        }
+
+        .component-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+
+        .total {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h3>Panier des composants</h3>
+    <div id="cart-items"></div>
+    <div class="total">Total: <span id="total-count">0</span> éléments</div>
+    <button id="clear-cart">Vider le panier</button>
+    <script src="popup.js"></script>
+</body>
+
+</html>
