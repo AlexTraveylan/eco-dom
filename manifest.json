@@ -5,10 +5,11 @@
     "description": "Compteur de DOM pour le Design System",
     "permissions": [
         "activeTab",
-        "storage"
+        "storage",
+        "scripting"
     ],
     "host_permissions": [
-        "http://design-system.docs.pole-emplo.intra/*"
+        "*://design-system.docs.pole-emploi.infra/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -16,7 +17,7 @@
     "content_scripts": [
         {
             "matches": [
-                "http://design-system.docs.pole-emplo.intra/*"
+                "*://design-system.docs.pole-emploi.infra/*"
             ],
             "js": [
                 "content.js"
