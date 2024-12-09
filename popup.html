@@ -9,24 +9,38 @@
             padding: 10px;
         }
 
-        .component-item {
+        button {
+            width: 100%;
+            margin: 5px 0;
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        #result {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+
+        .cart-item {
             display: flex;
             justify-content: space-between;
             margin: 5px 0;
-        }
-
-        .total {
-            margin-top: 10px;
-            font-weight: bold;
+            padding: 5px;
+            background-color: #f8f8f8;
         }
     </style>
 </head>
 
 <body>
-    <h3>Panier des composants</h3>
+    <button id="calculate">Calculer le nombre d'éléments</button>
+    <div id="result">En attente du calcul...</div>
+    <button id="addToCart" disabled>Ajouter au panier</button>
+    <hr>
+    <h3>Panier</h3>
     <div id="cart-items"></div>
-    <div class="total">Total: <span id="total-count">0</span> éléments</div>
-    <button id="clear-cart">Vider le panier</button>
+    <button id="clearCart">Vider le panier</button>
     <script src="popup.js"></script>
 </body>
 

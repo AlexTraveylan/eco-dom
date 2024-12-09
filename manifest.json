@@ -6,25 +6,10 @@
     "permissions": [
         "activeTab",
         "storage",
-        "scripting",
-        "tabs"
+        "scripting"
     ],
     "host_permissions": [
         "*://design-system.docs.pole-emploi.intra/*"
-    ],
-    "background": {
-        "service_worker": "background.js"
-    },
-    "content_scripts": [
-        {
-            "matches": [
-                "*://design-system.docs.pole-emploi.infra/*"
-            ],
-            "js": [
-                "content.js"
-            ],
-            "run_at": "document_end"
-        }
     ],
     "action": {
         "default_popup": "popup.html"
